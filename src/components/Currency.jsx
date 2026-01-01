@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 import '../css/currency.css'
 import { FaArrowRight } from "react-icons/fa6";
+import axios from 'axios';
+
+
+let API_KEY = ''
 
 function Currency() {
     const [amount, setAmount] = useState(0);
@@ -8,9 +12,27 @@ function Currency() {
     const [toCurrency, setToCurrency] = useState('TRY');
     const [result, setResult] = useState(0);
 
-    const exchange = () => {
-        // Backend entegrasyonu buraya yapılacak
-    }
+    const exchange = async () => {
+        try {
+            const response = await axios.get(
+                'https://api.freecurrencyapi.com/v1/latest',
+                {
+                    params: {
+                        apikey: API_KEY,
+                        base_currency: fromCurrency
+                    }
+                }
+            );
+
+            const rate = response.data.data[toCurrency];
+            const converted = (amount * rate).toFixed(2);
+
+            setResult(converted);
+        } catch (error) {
+            console.error("Döviz çevirme hatası:", error);
+        }
+    };
+
 
     return (
         <div className='currency-div'>
