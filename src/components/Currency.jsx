@@ -13,6 +13,11 @@ function Currency() {
     const [result, setResult] = useState(0);
 
     const exchange = async () => {
+        if (amount <= 0) {
+            alert("Lütfen 0'dan büyük bir miktar giriniz.");
+            return;
+        }
+
         try {
             const response = await axios.get(
                 'https://api.freecurrencyapi.com/v1/latest',
@@ -41,7 +46,7 @@ function Currency() {
             </div>
 
             <div className='currency-section'>
-                <input value={amount} onChange={(e) => setAmount(e.target.value)} type="number" className='amount' placeholder='Miktar' />
+                <input value={amount} onChange={(e) => setAmount(e.target.value)} type="number" min="0" className='amount' placeholder='Miktar' />
 
                 <select onChange={(e) => setFromCurrency(e.target.value)} className='from-currency-option' value={fromCurrency}>
                     <option value="USD">USD</option>
